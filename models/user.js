@@ -1,4 +1,4 @@
-import client from '../database/config.js';
+import { conectorDB } from '../database/config.js';
 
 class Usuario {
   constructor(id_user, user_nom, email, user_password, createat) {
@@ -11,7 +11,8 @@ class Usuario {
 
   obtenerUsuarios = async () => {
     try {
-      const result = await client.query('SELECT * FROM Usuarios');
+      const client = await conectorDB(); // Obtén el cliente de la base de datos
+      const result = await client.query('SELECT * FROM usuario'); // Utiliza el método query() del cliente
       return result.rows;
     } catch (error) {
       console.error('Error al obtener los usuarios:', error);
@@ -22,4 +23,4 @@ class Usuario {
   // Otras funciones del modelo Usuario...
 }
 
-export {Usuario};
+export { Usuario };

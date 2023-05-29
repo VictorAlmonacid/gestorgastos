@@ -1,7 +1,8 @@
 import { config } from 'dotenv';
 import express from 'express';
 import cors from 'cors';
-import client from '../database/config.js';
+import { conectorDB } from '../database/config.js';
+import { router as userRouter } from '../routes/user-ruta.js';
 
 export class Server {
   constructor() {
@@ -19,18 +20,18 @@ export class Server {
     this.routes();
 
     // Conexión a la base de datos
-    this.conectorDB();
+    // this.conectorDB();
   }
 
-  async conectorDB() {
-    try {
-      this.clienteDB = await client.connect();
-      console.log('Conexión a la base de datos exitosa');
-    } catch (error) {
-      console.error('Error al conectar con la base de datos:', error);
-      throw error;
-    }
-  }
+  // async conectorDB() {
+  //   try {
+  //     this.clienteDB = await conectorDB();
+  //     console.log('Conexión a la base de datos exitosa');
+  //   } catch (error) {
+  //     console.error('Error al conectar con la base de datos:', error);
+  //     throw error;
+  //   }
+  // }
 
   middlewares() {
     // Middleware para configurar CORS, body parser, etc.
@@ -38,6 +39,7 @@ export class Server {
 
   routes() {
     // Configuración de las rutas
+    this.app.use(this.usuariosPath, userRouter);
   }
 
   listen() {
