@@ -1,5 +1,6 @@
 
-import { Client } from "pg";
+import pkg from "pg";
+const { Client } = pkg;
 
 const dbConfig = {
   user: 'admin',
@@ -11,6 +12,4 @@ const dbConfig = {
 
 const client = new Client(dbConfig);
 
-export {
-    client
-}
+export default client;

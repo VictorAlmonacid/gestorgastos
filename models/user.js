@@ -1,5 +1,4 @@
-
-import client from '../database/config.js'
+import client from '../database/config.js';
 
 class Usuario {
   constructor(id_user, user_nom, email, user_password, createat) {
@@ -10,22 +9,17 @@ class Usuario {
     this.fechcreacion = createat;
   }
 
-  async obtenerUsuarios() {
+  obtenerUsuarios = async () => {
     try {
-      await Usuario.connect();
-      const result = await db.query('SELECT * FROM usuarios');
+      const result = await client.query('SELECT * FROM Usuarios');
       return result.rows;
     } catch (error) {
       console.error('Error al obtener los usuarios:', error);
       throw error;
-    } finally {
-      await db.end();
     }
   }
 
   // Otras funciones del modelo Usuario...
 }
 
-export{
-    Usuario
-};
+export {Usuario};
