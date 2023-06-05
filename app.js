@@ -4,8 +4,6 @@ import { conectorDB } from './database/config.js';
 
 config();
 
-
-
 const server = new Server();
 
 server.listen();

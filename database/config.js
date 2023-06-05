@@ -9,12 +9,12 @@ const dbConfig = {
   port: 5432,
 };
 
-
-// Crea una nueva instancia del cliente de PostgreSQL
-const client = new Client(dbConfig);
-
 // Función para conectar a la base de datos y devolver el cliente
 function conectorDB() {
+
+    // Crea una nueva instancia del cliente de PostgreSQL
+    const client = new Client(dbConfig);
+
   return client.connect()
     .then(() => {
       // Realiza las operaciones necesarias después de la conexión

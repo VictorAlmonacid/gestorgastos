@@ -23,18 +23,9 @@ export class Server {
     // this.conectorDB();
   }
 
-  // async conectorDB() {
-  //   try {
-  //     this.clienteDB = await conectorDB();
-  //     console.log('Conexión a la base de datos exitosa');
-  //   } catch (error) {
-  //     console.error('Error al conectar con la base de datos:', error);
-  //     throw error;
-  //   }
-  // }
-
   middlewares() {
     // Middleware para configurar CORS, body parser, etc.
+    this.app.use(express.json());
   }
 
   routes() {
