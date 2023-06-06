@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import { conectorDB } from '../database/config.js';
 import { router as userRouter } from '../routes/user-ruta.js';
+import { router as autRouter} from '../routes/autenticacion.js';
 
 export class Server {
   constructor() {
@@ -31,6 +32,7 @@ export class Server {
   routes() {
     // Configuración de las rutas
     this.app.use(this.usuariosPath, userRouter);
+    this.app.use(this.autPath, autRouter);
   }
 
   listen() {

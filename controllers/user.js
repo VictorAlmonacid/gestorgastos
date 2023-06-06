@@ -5,9 +5,9 @@ import { validationResult } from 'express-validator';
 
 const registerUser = async (req, res) => {
   try {
-    const { user_nom, email, user_password, createat } = req.body;
-
-    const usuario = new Usuario(user_nom, email, user_password, createat);
+    const { user_nom, email, user_password } = req.body;
+    
+    const usuario = new Usuario(null ,user_nom, email, user_password, new Date());
     const nuevoUsuario = await usuario.crearUsuarios();
 
     res.json(nuevoUsuario);
@@ -45,7 +45,7 @@ const usuariosGetPorId = async (req, res = response) => {
 const usuariosPut = async (req, res = response) => {
   try {
     const { id } = req.params;
-    const { id_user, user_nom, email, user_password, createat } = req.body;
+    const { user_nom, email } = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -55,14 +55,14 @@ const usuariosPut = async (req, res = response) => {
     // Validar en la base de datos
     // ...
 
-    if (user_password) {
-      const salt = bcrypt.genSaltSync();
-      const hashedPassword = bcrypt.hashSync(user_password, salt);
-      // resto.password = hashedPassword;
-      // No es necesario asignar el hash a "resto.password" si no lo estás utilizando más adelante
-    }
+    // if (user_password) {
+    //   const salt = bcrypt.genSaltSync();
+    //   const hashedPassword = bcrypt.hashSync(user_password, salt);
+    //   resto.password = hashedPassword;
+    //   // No es necesario asignar el hash a "resto.password" si no lo estás utilizando más adelante
+    //   }
 
-    const usuario = new Usuario(id_user, user_nom, email, user_password, createat);
+    const usuario = new Usuario(null, user_nom, email, null, null);
     const usuarioActualizado = await usuario.actualizarUsuario(id);
 
     res.json(usuarioActualizado);

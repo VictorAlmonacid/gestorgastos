@@ -1,4 +1,5 @@
 import { conectorDB } from '../database/config.js';
+import bcrypt from 'bcrypt';
 
 class Usuario {
   constructor(id_user, user_nom, email, user_password, createat) {
@@ -18,10 +19,14 @@ class Usuario {
         VALUES ($1, $2, $3, $4)
         RETURNING *
       `;
+
+      const salt = bcrypt.genSaltSync();
+      const hashedPassword = bcrypt.hashSync(this.user_password, salt);
+
       const values = [
         this.user_nom,
         this.email,
-        this.user_password,
+        hashedPassword, // Utiliza el hash de la contraseña en lugar de la contraseña original
         this.createat,
       ];
 
@@ -56,24 +61,33 @@ class Usuario {
     }
   };
 
+  obtenerUsuariosPorCorreo = async (email) => {
+    try {
+      const client = await conectorDB();
+      const result = await client.query('SELECT * FROM usuario WHERE email = $1', [email]);
+      return result.rows;
+    } catch (error) {
+      console.error('Error al obtener los usuarios:', error);
+      throw error;
+    }
+  };
+
   actualizarUsuario = async (id) => {
     try {
       const client = await conectorDB();
       const query = `
         UPDATE usuario
-        SET id_user=$1, user_nom=$2, email=$3, user_password=$4, createat=$5
-        WHERE id_user=$6
+        SET user_nom=$1, email=$2
+        WHERE id_user=$3
         RETURNING *
       `;
+  
       const values = [
-        this.id_user,
         this.user_nom,
         this.email,
-        this.user_password,
-        this.createat,
-        id,
+        id // Agrega el tercer parámetro 'id' aquí
       ];
-
+  
       const result = await client.query(query, values);
       return result.rows[0];
     } catch (error) {
