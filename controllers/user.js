@@ -11,7 +11,9 @@ const registerUser = async (req, res) => {
     const usuario = new Usuario(null ,user_nom, email, user_password, new Date());
     const nuevoUsuario = await usuario.crearUsuarios();
 
-    res.json(nuevoUsuario);
+    const token = jwt.sign({ usuarioId: nuevoUsuario.id }, 'Token', { expiresIn: '1h' });
+    res.json({ token, nuevoUsuario });
+
   } catch (error) {
     console.error('Error al registrar el usuario:', error);
     res.status(500).json({ error: 'Error al registrar el usuario' });

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 const verificarToken = (req, res, next) => {
-  const token = req.header('Authorization');
+  const token = req.header('Token')?.split(' ')[1];
   if (!token) {
     return res.status(401).json({ error: 'Acceso no autorizado' });
   }

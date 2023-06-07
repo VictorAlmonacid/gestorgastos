@@ -21,9 +21,9 @@ router.put('/:id',[
   check('user_nom').notEmpty().withMessage('El nombre de usuario es requerido'),
   check('email').notEmpty().withMessage('El correo electrónico es requerido').isEmail().withMessage('El correo electrónico no es válido'),
   validarCampos
-],usuariosPut);
+],verificarToken ,usuariosPut);
 
-router.delete("/:id", eliminarUsuario);
+router.delete("/:id", verificarToken, eliminarUsuario);
 
 router.use(verificarToken);
 
