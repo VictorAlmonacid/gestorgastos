@@ -2,7 +2,7 @@ import { Router } from "express";
 import { eliminarUsuario, registerUser, usuariosGet, usuariosPut, usuariosGetPorId } from "../controllers/user.js";
 import { validarCampos } from "../middlewares/validar.js";
 import { check } from "express-validator";
-
+import { verificarToken } from "../middlewares/autenticacion.js";
 
 const router = Router();
 
@@ -24,6 +24,8 @@ router.put('/:id',[
 ],usuariosPut);
 
 router.delete("/:id", eliminarUsuario);
+
+router.use(verificarToken);
 
 export {
   router

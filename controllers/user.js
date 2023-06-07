@@ -2,6 +2,7 @@ import { response } from 'express';
 import bcrypt from 'bcrypt';
 import { Usuario } from '../models/user.js';
 import { validationResult } from 'express-validator';
+import jwt from 'jsonwebtoken';
 
 const registerUser = async (req, res) => {
   try {
