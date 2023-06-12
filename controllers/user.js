@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { Usuario } from '../models/user.js';
 import { validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
+import { enviarMail } from '../helpers/mailer.js';
 
 const registerUser = async (req, res) => {
   try {
@@ -12,12 +13,16 @@ const registerUser = async (req, res) => {
     const nuevoUsuario = await usuario.crearUsuarios();
 
     const token = jwt.sign({ usuarioId: nuevoUsuario.id }, 'Token', { expiresIn: '1h' });
+
+    enviarMail('eduardottito2002@gmail.com', 'Confirmación', '¡Gracias por registrarte!');
+
     res.json({ token, nuevoUsuario });
 
   } catch (error) {
     console.error('Error al registrar el usuario:', error);
     res.status(500).json({ error: 'Error al registrar el usuario' });
   }
+
 };
 
 const usuariosGet = async (req, res = response) => {
