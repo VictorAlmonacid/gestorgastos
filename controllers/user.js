@@ -8,13 +8,22 @@ import { enviarMail } from '../helpers/mailer.js';
 const registerUser = async (req, res) => {
   try {
     const { user_nom, email, user_password } = req.body;
-    
+
     const usuario = new Usuario(null ,user_nom, email, user_password, new Date());
     const nuevoUsuario = await usuario.crearUsuarios();
 
     const token = jwt.sign({ usuarioId: nuevoUsuario.id }, 'Token', { expiresIn: '1h' });
 
-    enviarMail('eduardottito2002@gmail.com', 'Confirmación', '¡Gracias por registrarte!');
+    const plantilla = 
+    `<html>
+      <body>
+        <h1 style="color: black; text-align: center;">Bienvenido(a) a nuestra aplicación</h1>
+        <p>¡Gracias ${ nuevoUsuario.user_nom } por registrarte!</p>
+        <p>Puedes iniciar sesión con tu correo electrónico y contraseña.</p>
+      </body>
+    </html>`;
+
+    enviarMail(email, 'Confirmación', plantilla);
 
     res.json({ token, nuevoUsuario });
 

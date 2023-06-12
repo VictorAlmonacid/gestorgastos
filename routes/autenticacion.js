@@ -1,5 +1,5 @@
 import { validarCampos } from "../middlewares/validar.js";
-import { loginUser } from "../controllers/autenticacion.js";
+import { existeCorreo, loginUser, tokenValido } from "../controllers/autenticacion.js";
 import { Router } from "express";
 import { check } from "express-validator";
 
@@ -11,5 +11,14 @@ const router = Router();
         validarCampos
     ], loginUser);
 
+    router.get('/recuperar',existeCorreo);
+
+    router.get('/token', tokenValido
+        //VALIDA TOKEN
+    );
+
+    router.put([
+        //CAMBIA CONTRASEÑA
+    ]);
 
 export { router };
