@@ -72,38 +72,4 @@ const existeCorreo = async ( req, res = response )=>{
 
 };
 
-const tokenValido = async(req, res = response) => {
-
-  try{
-
-    const tokenV = req.header('Token')?.split(' ')[1];
-    console.log(tokenV)
-    
-    const user = await verificarToken(tokenV);
-    console.log(user);
-    if(!user){
-       return res.status(400).json({error:'Este Token caduco'});
-    }
-
-    const nuevoToken = jwt.sign({ email: user.email }, 'NuevoToken', {expiresIn: '10m'});
-
-    const plantilla = 
-    `<html>
-      <body>
-        <h1 style="color: black; text-align: center;">Nuevo Token</h1>
-        <p>Este es tu nuevo Token ${ nuevoToken } para cambiar Contraseña!</p>
-      </body>
-    </html>`;
-
-    enviarMail(user.email, 'Nuevo Token', plantilla);
-
-    res.json({message:'Valido',tokenV});
-
-  }catch(error){
-    console.error('Token invalido: ', error);
-    res.status(500).json({error: 'Token invalido'});
-  }
-
-};
-
 export { loginUser, existeCorreo, tokenValido};
