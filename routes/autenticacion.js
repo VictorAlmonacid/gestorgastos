@@ -1,7 +1,8 @@
 import { validarCampos } from "../middlewares/validar.js";
-import { existeCorreo, loginUser, tokenValido } from "../controllers/autenticacion.js";
+import { cambioContrasena, existeCorreo, loginUser } from "../controllers/autenticacion.js";
 import { Router } from "express";
 import { check } from "express-validator";
+import { validarJWT } from "../middlewares/autenticacion.js";
 
 const router = Router();
 
@@ -13,12 +14,10 @@ const router = Router();
 
     router.get('/recuperar',existeCorreo);
 
-    router.get('/token', tokenValido
-        //VALIDA TOKEN
-    );
-
-    router.put([
-        //CAMBIA CONTRASEÑA
-    ]);
+    router.get('/cambio-contrasena',[
+        check('new_password').notEmpty().withMessage('Escriba la nueva contraseña'),
+        check('repeat_password').notEmpty().withMessage('Repita la contraseña'),
+        validarCampos
+    ],validarJWT, cambioContrasena);
 
 export { router };

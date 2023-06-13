@@ -1,19 +1,36 @@
+import { request } from 'express';
 import jwt from 'jsonwebtoken';
 
-const verificarToken = (req, res, next) => {
-  const token = req.header('Token')?.split(' ')[1];
-  if (!token) {
-    return res.status(401).json({ error: 'Acceso no autorizado' });
-  }
+const validarJWT = (req, res = response, next) => {
+    // x-token headers
+    const token = req.header('x-token')?.split(' ')[1];;
 
-  try {
-    const decoded = jwt.verify(token, 'Token');
-    req.usuario = decoded; // Almacena los datos del usuario decodificados en el objeto de solicitud para su uso posterior
+    if(!token){
+        return res.status(401).json({
+            ok: false,
+            msg: 'No hay token en la peticion'
+        })
+    }
+
+    try{
+
+        const {id_user} = jwt.verify(
+            token,
+            process.env.SECRET_JWT_SEED
+        );
+        req.uid= id_user;
+        
+    }catch(error){
+        return res.status(401).json({
+            ok: false,
+            msg: 'Token no valido'
+        })
+    }
+
     next();
-  } catch (error) {
-    console.error('Error al verificar el token:', error);
-    res.status(401).json({ error: 'Token inválido' });
-  }
-};
+}
 
-export { verificarToken };
+
+export {
+    validarJWT
+}

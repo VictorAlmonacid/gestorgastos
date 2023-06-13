@@ -2,6 +2,7 @@ import { conectorDB } from '../database/config.js';
 import bcrypt from 'bcrypt';
 
 class Usuario {
+  
   constructor(id_user, user_nom, email, user_password, createat) {
     this.id_user = id_user;
     this.user_nom = user_nom;
@@ -111,6 +112,30 @@ class Usuario {
       throw error;
     }
   };
+
+  actualizarContrasena = async (id_user) => {
+    try{
+      const client = await conectorDB ();
+      const query = `
+        UPDATE usuario
+        SET user_password=$1
+        WHERE id_user=$2
+        RETURNING *
+      `;
+      
+      const values = [
+        this.user_password,
+        id_user
+      ];
+      
+      const result = await client.query(query, values);
+      return result.rows[0];
+    }catch(error){
+      console.error('Error al cambiar contraseña: ', error);
+      throw error;
+    }
+  };
+
 }
 
 export { Usuario };

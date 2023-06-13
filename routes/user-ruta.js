@@ -2,7 +2,7 @@ import { Router } from "express";
 import { eliminarUsuario, registerUser, usuariosGet, usuariosPut, usuariosGetPorId } from "../controllers/user.js";
 import { validarCampos } from "../middlewares/validar.js";
 import { check } from "express-validator";
-import { verificarToken } from "../middlewares/autenticacion.js";
+import { validarJWT } from "../middlewares/autenticacion.js";
 
 const router = Router();
 
@@ -21,11 +21,11 @@ router.put('/:id',[
   check('user_nom').notEmpty().withMessage('El nombre de usuario es requerido'),
   check('email').notEmpty().withMessage('El correo electrónico es requerido').isEmail().withMessage('El correo electrónico no es válido'),
   validarCampos
-],verificarToken ,usuariosPut);
+],validarJWT ,usuariosPut);
 
-router.delete("/:id", verificarToken, eliminarUsuario);
+router.delete("/:id", validarJWT, eliminarUsuario);
 
-router.use(verificarToken);
+router.use(validarJWT);
 
 export {
   router
